@@ -25,15 +25,18 @@ class StyleTransfer:
 
     # Function to extract intermediate features from specific layers
     def ext_ft(self, x):
+        features = self.model(x)
+
         content_ft = []
         style_ft = []
 
-        for i, layer in enumerate(self.model):
-            x = layer(x)
-            if i in self.content_layers:
-                content_ft.append(x)
-            if i in self.style_layers:
-                style_ft.append(x)
+        for layer_name in self.content_layers:
+            if layer_name in features:
+                content_ft.append(features[layer_name])
+
+        for layer_name in self.style_layers:
+            if layer_name in features:
+                style_ft.append(features[layer_name])
 
         return content_ft, style_ft
 
@@ -43,18 +46,18 @@ class StyleTransfer:
         tgt_content, _ = self.ext_ft(content)
         _, tgt_style = self.ext_ft(style)
 
-        content_loss = 0.0
-        style_loss = 0.0
+        content_loss = torch.tensor(0.0, device=gen.device, requires_grad=True)
+        style_loss = torch.tensor(0.0, device=gen.device, requires_grad=True)
 
         # Calculate content losses
         for gc, tc in zip(gen_content, tgt_content):
-            content_loss += F.mse_loss(gc, tc)
+            content_loss = content_loss + F.mse_loss(gc, tc)
 
         # Calculate style losses
         for gs, ts in zip(gen_style, tgt_style):
             gm_g = gram_matrix(gs)
             gm_t = gram_matrix(ts)
-            style_loss += F.mse_loss(gm_g, gm_t)
+            style_loss = style_loss + F.mse_loss(gm_g, gm_t)
 
         total_loss = alpha * content_loss + beta * style_loss
 
