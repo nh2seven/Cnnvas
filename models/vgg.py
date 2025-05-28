@@ -22,24 +22,22 @@ class VGG_FE(nn.Module):
         # Define the model structure
         self.model = nn.Sequential()
         self.layers = {}
-
-        conv = 0
-        relu = 0
-        pool = 0
+        conv_block = 1
+        conv_in_block = 0
         layer_names = []
 
         # Iterate through the VGG layers and build the feature extractor
         for i, layer in enumerate(vgg.children()):
             if isinstance(layer, nn.Conv2d):
-                conv += 1
-                name = f"conv{conv}"
+                conv_in_block += 1
+                name = f"conv{conv_block}_{conv_in_block}"
             elif isinstance(layer, nn.ReLU):
-                relu += 1
-                name = f"relu{relu}"
+                name = f"relu{conv_block}_{conv_in_block}"
                 layer = nn.ReLU(inplace=False)
             elif isinstance(layer, nn.MaxPool2d):
-                pool += 1
-                name = f"pool{pool}"
+                name = f"pool{conv_block}"
+                conv_block += 1
+                conv_in_block = 0
             else:
                 name = f"layer{i}"
 
