@@ -1,0 +1,9 @@
+numpy
+Pillow
+matplotlib
+gradio
+torchinfo
+PyYAML
+
+# Install PyTorch using the command below:
+# pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu128
