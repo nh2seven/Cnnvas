@@ -39,9 +39,9 @@ class StyleTransfer:
 
     # Function to compute losses for style transfer
     def loss(self, gen, content, style, alpha=1.0, beta=1e5):
-        gen_content, gen_style = self.extract_features(gen)
-        tgt_content, _ = self.extract_features(content)
-        _, tgt_style = self.extract_features(style)
+        gen_content, gen_style = self.ext_ft(gen)
+        tgt_content, _ = self.ext_ft(content)
+        _, tgt_style = self.ext_ft(style)
 
         content_loss = 0.0
         style_loss = 0.0
