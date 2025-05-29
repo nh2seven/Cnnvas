@@ -12,7 +12,7 @@ paths:
 
 # Model configuration
 model:
-    content_layers: ["conv4_2"]
+    content_layers: ["conv4_2", "conv5_2"]
     style_layers: ["conv1_1", "conv2_1", "conv3_1", "conv4_1"]
 
 # Style transfer configuration
@@ -22,30 +22,3 @@ style_transfer:
     epochs: 1000
     learning_rate: 0.01
     print_interval: 100
-    random_seed: 42
-    device: "auto"
-
-# Optimization settings
-optimizer:
-    type: "adam"
-    weight_decay: 0.0
-    momentum: 0.9
-    betas: [0.9, 0.999]
-
-# Output and logging
-output:
-    save_intermediate: false
-    intermediate_interval: 200
-
-# Model settings
-model_config:
-    vgg_variant: "vgg16"
-    pretrained_weights: "IMAGENET1K_V1"
-    freeze_features: true
-
-# General training parameters
-training:
-    batch_size: 32
-    epochs: 50
-    learning_rate: 0.001
-    weight_decay: 0.0001
