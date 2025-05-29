@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+import yaml
 
 
 # Function to compute the Gram matrix of a set of features
@@ -14,10 +15,15 @@ def gram_matrix(features):
 
 # Class for Style Transfer implementation
 class StyleTransfer:
-    def __init__(self, model, content, style):
+    def __init__(self, model, content_layers=None, style_layers=None, conf_path="config.yaml"):
+        # Load config for default parameters
+        with open(conf_path, "r") as f:
+            config = yaml.safe_load(f)
+        
         self.model = model.eval()
-        self.content_layers = content
-        self.style_layers = style
+        self.content_layers = content_layers or config["model"]["content_layers"]
+        self.style_layers = style_layers or config["model"]["style_layers"]
+        self.config = config
 
         # Freeze VGG parameters
         for param in self.model.parameters():
@@ -41,7 +47,11 @@ class StyleTransfer:
         return content_ft, style_ft
 
     # Function to compute losses for style transfer
-    def loss(self, gen, content, style, alpha=1.0, beta=1e5):
+    def loss(self, gen, content, style, alpha=None, beta=None):
+        # Use config defaults if not provided
+        alpha = alpha if alpha is not None else self.config["style_transfer"]["alpha"]
+        beta = beta if beta is not None else self.config["style_transfer"]["beta"]
+        
         gen_content, gen_style = self.ext_ft(gen)
         tgt_content, _ = self.ext_ft(content)
         _, tgt_style = self.ext_ft(style)

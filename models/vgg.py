@@ -2,12 +2,15 @@ import torch
 import torch.nn as nn
 from torchvision import models
 from torchinfo import summary
+import yaml
 
 
 # VGG Feature Extractor for Style Transfer
 class VGG_FE(nn.Module):
-    def __init__(self, content=None, style=None):
+    def __init__(self, content=None, style=None, conf_path="config.yaml"):
         super(VGG_FE, self).__init__()
+        with open(conf_path, "r") as f:
+            config = yaml.safe_load(f)
 
         # Load pretrained VGG16 model
         vgg = models.vgg16(weights="IMAGENET1K_V1").features.eval()
@@ -15,8 +18,8 @@ class VGG_FE(nn.Module):
             param.requires_grad = False
 
         # Select layers for content and style features
-        self.content = content or ["conv4_2"]
-        self.style = style or ["conv1_1", "conv2_1", "conv3_1", "conv4_1"]
+        self.content = content or config["model"]["content_layers"]
+        self.style = style or config["model"]["style_layers"]
         self.required = set(self.content + self.style)
 
         # Define the model structure

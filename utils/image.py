@@ -1,15 +1,19 @@
 import torch
 from torchvision import transforms
 from PIL import Image
+import yaml
 
 
 # Class for image processing
 class Img:
-    def __init__(self, size=512):
-        self.size = size
+    def __init__(self, conf_path="config.yaml"):
+        with open(conf_path, "r") as f:
+            config = yaml.safe_load(f)
+
+        self.size = config["data"]["image_size"]
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.mean = [0.485, 0.456, 0.406]
-        self.std = [0.229, 0.224, 0.225]
+        self.mean = config["data"]["mean"]
+        self.std = config["data"]["std"]
 
         self.preprocess = transforms.Compose(
             [
