@@ -1,0 +1,12 @@
+# Ignore unnecessary files and directories for container build
+assets/
+output/
+__pycache__/
+.git/
+.gitignore
+README.md
+LICENSE
+
+# Keep the directories but ignore their contents
+!assets/.gitkeep
+!output/.gitkeep
