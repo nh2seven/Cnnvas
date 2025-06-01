@@ -5,7 +5,7 @@ Cnnvas is a CNN-based neural style transfer (NST) tool for generating artistic i
 - Takes content and style images as input, produces stylized image that largely follows the concept of [Deep Art](https://en.wikipedia.org/wiki/DeepArt).
 - Interactive web interface built with Gradio for simplified usage.
 - Available as a container for easy reproducibility. 
-- The Docker image is also available on [Docker Hub]().
+- The Docker image is also available on [Docker Hub](https://hub.docker.com/r/nh2seven/cnnvas).
 
 ## Requirements
 ### Hardware Requirements
@@ -42,10 +42,10 @@ docker build -t cnnvas .
 This is the intended way of running `Cnnvas` locally:
 ```bash
 # Use all available GPUs
-docker run --gpus all -p 7860:7860 --name cnnvas nh2seven/cnnvas
+docker run --gpus all -p 7860:7860 --name cnnvas --rm nh2seven/cnnvas
 
 # Or, specify a particular GPU (0/1/...)
-docker run --gpus device=0 -p 7860:7860 --name cnnvas nh2seven/cnnvas
+docker run --gpus device=0 -p 7860:7860 --name cnnvas --rm nh2seven/cnnvas
 ```
 
 ### With CPU Only
